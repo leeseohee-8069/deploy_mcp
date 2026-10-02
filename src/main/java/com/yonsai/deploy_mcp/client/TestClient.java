@@ -22,4 +22,8 @@ public interface TestClient {
   @GetMapping("/posts")
   List<Map<String, Object>> getPosts();
 
+  // 오픈페인도구가 자동으로 rest api 코드 만들어서 데이터 받는다.
+  @GetMapping("/comments")
+  List<Map<String, Object>> getComments();
+
 }
