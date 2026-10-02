@@ -1,15 +1,29 @@
 package com.yonsai.deploy_mcp.controller;
 
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yonsai.deploy_mcp.client.TestClient;
+
 @RestController
 public class HomeController {
 
+  @Autowired
+  private TestClient 자동코드작성담당자;
+
   @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
   public String home() {
-    return "index";
+    System.out.println("실행 전");
+    Map<String, Object> 결과 = 자동코드작성담당자.getPosts();
+
+    System.out.println("실행 후");
+
+    // 맵타일을 문자로 변경해서 브라우저로 보내기!
+    return 결과.toString();
   }
 }
 
