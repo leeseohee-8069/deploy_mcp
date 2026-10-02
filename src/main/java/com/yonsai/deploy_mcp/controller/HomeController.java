@@ -1,12 +1,15 @@
 package com.yonsai.deploy_mcp.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yonsai.deploy_mcp.client.PublicClient;
 import com.yonsai.deploy_mcp.client.TestClient;
 
 @RestController
@@ -15,16 +18,38 @@ public class HomeController {
   @Autowired
   private TestClient 자동코드작성담당자;
 
+  @Value("${service-key}")
+  private String serviceKey;
+
+  @Autowired
+  private PublicClient 공공데이터자동코드담당자;
+
   @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
   public String home() {
     System.out.println("실행 전");
-    Map<String, Object> 결과 = 자동코드작성담당자.getPosts();
+    List<Map<String, Object>> 결과 = 자동코드작성담당자.getPosts();
 
     System.out.println("실행 후");
 
     // 맵타일을 문자로 변경해서 브라우저로 보내기!
     return 결과.toString();
   }
+
+  @GetMapping(value = "/data", produces = MediaType.TEXT_HTML_VALUE)
+  public String publicData() {
+
+    System.out.println("공공데이터 호출 전!");
+
+    Map<String, Object> 결과 = 공공데이터자동코드담당자
+        .getLoan(serviceKey,
+            "1",
+            "10",
+            "json");
+    System.out.println("공공데이터 호출 후 !");
+
+    return 결과.toString();
+  }
+
 }
 
 /*
@@ -33,6 +58,8 @@ public class HomeController {
  * - 원래라면 코드를 직접 작성하지만 OpenFeign 요청 주소를
  * 적으면 코드를 자동으로 만들어준다.
  * - 자바버전 + spring ai버전 + OpenFeign 버전 확인 꼭!(호환성)
+ * - 자동인코딩이 되기때문에 API_KEY를 가져올때는 인코딩이 되지 않은
+ * 디코딩키를 사용한다.
  * 
  * AI -> MCP 도구 호출: 대출상품 조회해줘!
  * MCP-> OpenFeign 호출
