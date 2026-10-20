@@ -35,3 +35,7 @@ jobs:
           source: build/libs/deploy_mcp-0.0.1-SNAPSHOT.jar
           target: /home/ubuntu/
           strip_components: 2
+
+
+#리눅스에서 환경변수만드는 명령어
+# export
